@@ -1,11 +1,13 @@
 <template>
   <div>
-    <h1>Here is todays weather</h1>
+    <h2>{{ currentWeather.last_updated }}</h2>
+    <h2>{{ date }}</h2>
   </div>
 </template>
 
 <script>
 import getCurrentWeather from "../services/rest";
+import formatDate from "../ressources/app";
 
 export default {
   name: "Feed",
@@ -15,16 +17,23 @@ export default {
   data() {
     return {
       currentWeather: Object,
+      date: String,
     };
   },
-  created() {
-    this.getCurrentWeather();
+  async created() {
+    this.getCurrentWeather().then(() => this.getDate());
   },
   methods: {
     async getCurrentWeather() {
       const data = await getCurrentWeather();
       this.currentWeather = data.current;
       console.log("current", this.currentWeather);
+    },
+
+    getDate() {
+      let unformattedDate = this.currentWeather.last_updated;
+      this.date = formatDate(unformattedDate);
+      console.log(this.date);
     },
   },
 };
