@@ -1,15 +1,15 @@
 <template>
   <div>
-    <h2>{{ date }}</h2>
+    <h2>{{ currentDate }}</h2>
     <p>{{ currentWeather.temp_c }}</p>
     <br />
-    <p>Humidity: {{ humidity }}%</p>
+    <p>Humidity: {{ currentHumidity }}%</p>
   </div>
 </template>
 
 <script>
-import getCurrentWeather from "../services/rest";
-import formatDate from "../ressources/app";
+import { getCurrentWeather, getYesterdaysWeather } from "../services/rest";
+import { formatDate, yesterdaysDate } from "../ressources/app";
 
 export default {
   name: "Feed",
@@ -19,16 +19,23 @@ export default {
   data() {
     return {
       currentWeather: Object,
-      date: String,
-      minTemp: Number,
-      maxTemp: Number,
-      humidity: Number,
+      currentDate: String,
+      currentMinTemp: Number,
+      currentMaxTemp: Number,
+      currentHumidity: Number,
+
+      yesterdaysWeather: Object,
+      yesterdaysDate: String,
+      yesterdaysMinTemp: Number,
+      yesterdaysMaxTemp: Number,
+      yesterdaysHumidity: Number,
     };
   },
   async created() {
     this.getCurrentWeather()
       .then(() => this.getCurrentDate())
-      .then(() => this.getCurrentMinMaxTempHumidity());
+      .then(() => this.getCurrentMinMaxTempHumidity())
+      .then(() => this.getYesterdaysWeather());
   },
   methods: {
     async getCurrentWeather() {
@@ -39,14 +46,21 @@ export default {
 
     getCurrentDate() {
       let unformattedDate = this.currentWeather.date;
-      this.date = formatDate(unformattedDate);
+      this.currentDate = formatDate(unformattedDate);
       console.log(this.date);
     },
 
     getCurrentMinMaxTempHumidity() {
-      this.minTemp = this.currentWeather.day.mintemp_c;
-      this.maxTemp = this.currentWeather.day.maxtemp_c;
-      this.humidity = this.currentWeather.day.avghumidity;
+      this.currentMinTemp = this.currentWeather.day.mintemp_c;
+      this.currentMaxTemp = this.currentWeather.day.maxtemp_c;
+      this.currentHumidity = this.currentWeather.day.avghumidity;
+    },
+
+    async getYesterdaysWeather() {
+      let yesterday = yesterdaysDate(this.currentDate);
+      const data = await getYesterdaysWeather(yesterday);
+      this.yesterdaysWeather = data.forecast.forecastday[0];
+      console.log("yesterday", this.yesterdaysWeather);
     },
   },
 };
