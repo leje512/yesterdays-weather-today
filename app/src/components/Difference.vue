@@ -1,5 +1,9 @@
 <template>
-  <div></div>
+  <div>
+    <span>{{ oldData }}</span>
+    <span id="difference">{{ difference }}</span>
+    <span>{{ newData }}</span>
+  </div>
 </template>
 
 <script>
@@ -14,8 +18,14 @@ export default {
       difference: Number,
     };
   },
-  created() {},
-  methods: {},
+  created() {
+    this.getDifference();
+  },
+  methods: {
+    getDifference() {
+      this.difference = this.newData - this.oldData;
+    },
+  },
 };
 </script>
 
@@ -34,5 +44,10 @@ li {
 }
 a {
   color: #42b983;
+}
+#difference {
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 25px;
 }
 </style>
