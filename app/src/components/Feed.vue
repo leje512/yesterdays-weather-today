@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h2>{{ currentWeather.last_updated }}</h2>
     <h2>{{ date }}</h2>
+    <p>{{ currentWeather.temp_c }}</p>
+    <br />
+    <p>Humidity: {{ humidity }}%</p>
   </div>
 </template>
 
@@ -18,22 +20,33 @@ export default {
     return {
       currentWeather: Object,
       date: String,
+      minTemp: Number,
+      maxTemp: Number,
+      humidity: Number,
     };
   },
   async created() {
-    this.getCurrentWeather().then(() => this.getDate());
+    this.getCurrentWeather()
+      .then(() => this.getCurrentDate())
+      .then(() => this.getCurrentMinMaxTempHumidity());
   },
   methods: {
     async getCurrentWeather() {
       const data = await getCurrentWeather();
-      this.currentWeather = data.current;
+      this.currentWeather = data.forecast.forecastday[0];
       console.log("current", this.currentWeather);
     },
 
-    getDate() {
-      let unformattedDate = this.currentWeather.last_updated;
+    getCurrentDate() {
+      let unformattedDate = this.currentWeather.date;
       this.date = formatDate(unformattedDate);
       console.log(this.date);
+    },
+
+    getCurrentMinMaxTempHumidity() {
+      this.minTemp = this.currentWeather.day.mintemp_c;
+      this.maxTemp = this.currentWeather.day.maxtemp_c;
+      this.humidity = this.currentWeather.day.avghumidity;
     },
   },
 };
