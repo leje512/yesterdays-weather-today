@@ -13,4 +13,12 @@ async function getCurrentWeather() {
   return data;
 }
 
-export default getCurrentWeather;
+async function getYesterdaysWeather(date) {
+  const response = axios.get(
+    `${baseUrl}/history.json?key=${key}&q=${latitude},${longtitude}&dt=${date}`
+  );
+  const data = (await response).data;
+  return data;
+}
+
+export default { getCurrentWeather, getYesterdaysWeather };
