@@ -23,7 +23,8 @@ export default {
   },
   methods: {
     getDifference() {
-      this.difference = this.newData - this.oldData;
+      let diff = this.newData - this.oldData;
+      this.difference = diff.toFixed(1);
     },
   },
 };
