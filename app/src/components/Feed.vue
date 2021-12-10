@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h2>{{ currentDate }}</h2>
-    <p>{{ currentWeather.temp_c }}</p>
+    <h2>Today: {{ currentDate }}</h2>
+    <p>vs. Yesterday: {{ yesterdaysDate }}</p>
+    <p>{{ currentMinTemp }} vs. {{ yesterdaysMinTemp }}</p>
     <br />
     <p>Humidity: {{ currentHumidity }}%</p>
   </div>
@@ -35,7 +36,10 @@ export default {
     this.getCurrentWeather()
       .then(() => this.getCurrentDate())
       .then(() => this.getCurrentMinMaxTempHumidity())
-      .then(() => this.getYesterdaysWeather());
+      .then(() => this.getYesterdaysWeather())
+      .then(() => this.getYesterdaysWeather())
+      .then(() => this.getYesterdaysDate())
+      .then(() => this.getYesterdaysMinMaxTempHumidity());
   },
   methods: {
     async getCurrentWeather() {
@@ -61,6 +65,18 @@ export default {
       const data = await getYesterdaysWeather(yesterday);
       this.yesterdaysWeather = data.forecast.forecastday[0];
       console.log("yesterday", this.yesterdaysWeather);
+    },
+
+    getYesterdaysDate() {
+      let unformattedDate = this.yesterdaysWeather.date;
+      this.yesterdaysDate = formatDate(unformattedDate);
+      console.log("yesterday", this.date);
+    },
+
+    getYesterdaysMinMaxTempHumidity() {
+      this.yesterdaysMinTemp = this.yesterdaysWeather.day.mintemp_c;
+      this.yesterdaysMaxTemp = this.yesterdaysWeather.day.maxtemp_c;
+      this.yesterdaysHumidity = this.yesterdaysWeather.day.avghumidity;
     },
   },
 };
