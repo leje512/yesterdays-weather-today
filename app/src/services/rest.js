@@ -6,10 +6,11 @@ const latitude = "48.342852";
 const longtitude = "10.905494";
 
 async function getCurrentWeather() {
-  let response = axios.get(
+  const response = axios.get(
     `${baseUrl}/current.json?key=${key}&q=${latitude},${longtitude}`
   );
-  return response;
+  const data = (await response).data;
+  return data;
 }
 
 export default getCurrentWeather;
