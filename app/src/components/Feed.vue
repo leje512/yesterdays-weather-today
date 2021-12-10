@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>{{ location }}</h2>
     <h2>Today: {{ currentDate }} vs. Yesterday: {{ yesterdaysDate }}</h2>
     <div class="difference">
       <h4>Minimum Temperature</h4>
@@ -43,6 +44,7 @@ export default {
   },
   data() {
     return {
+      location: undefined,
       currentWeather: undefined,
       currentDate: undefined,
       currentMinTemp: undefined,
@@ -67,6 +69,7 @@ export default {
   methods: {
     async getCurrentWeather() {
       const data = await getCurrentWeather();
+      this.location = data.location.name;
       this.currentWeather = data.forecast.forecastday[0];
       console.log("current", this.currentWeather);
     },
