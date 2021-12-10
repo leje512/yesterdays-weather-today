@@ -1,15 +1,29 @@
 <template>
   <div>
-    <h2>Today: {{ currentDate }}</h2>
-    <p>vs. Yesterday: {{ yesterdaysDate }}</p>
+    <h2>Today: {{ currentDate }} vs. Yesterday: {{ yesterdaysDate }}</h2>
+    <h4>Minimum Temperature</h4>
     <Difference
+      class="difference"
       id="minTemp"
       :old-data="yesterdaysMinTemp"
       :new-data="currentMinTemp"
       :key="yesterdaysMinTemp"
     />
-    <br />
-    <p>Humidity: {{ currentHumidity }}%</p>
+    <h4>Maximum Temperature</h4>
+    <Difference
+      class="difference"
+      id="maxTemp"
+      :old-data="yesterdaysMaxTemp"
+      :new-data="currentMaxTemp"
+      :key="yesterdaysMaxTemp"
+    />
+    <h4>Humidity</h4>
+    <Difference
+      class="difference"
+      id="humidity"
+      :old-data="yesterdaysHumidity"
+      :new-data="currentHumidity"
+    />
   </div>
 </template>
 
@@ -98,5 +112,8 @@ li {
 }
 a {
   color: #42b983;
+}
+.difference {
+  margin: 2%;
 }
 </style>
